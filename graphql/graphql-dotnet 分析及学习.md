@@ -16,12 +16,34 @@
 
 1. 对比安装前后目录：
 
-![](001.png)
+![1](001.png)
 
 项目目录下增加了 node_modules 是 nodejs 的包管理目录所有的公共包（库）都安装在这个目录下。
 
-![](002.png)
+![2](002.png)
 
-站点项目增加了public目录主要是生成界面的文件
+站点项目增加了public目录主要是生成界面的文件bundle.js
 
-![](003.png)
+![3](003.png)
+
+1. 我们分析一下启动项目GraphQL.GraphiQLCore
+
+![4](004.png)
+
+- Program.cs
+
+`   public class Program
+    {
+        public static void Main(string[] args)
+        {
+            BuildWebHost(args).Run();
+        }
+
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .UseWebRoot("public")
+                .Build();
+    }`
+
+简单的代码，指定启动目录为public，就是我们刚刚生成文件的目录。
