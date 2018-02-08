@@ -32,7 +32,8 @@
 
 - Program.cs
 
-`   public class Program
+`
+    public class Program
     {
         public static void Main(string[] args)
         {
@@ -44,6 +45,7 @@
                 .UseStartup<Startup>()
                 .UseWebRoot("public")
                 .Build();
-    }`
+    }
+`
 
 简单的代码，指定启动目录为public，就是我们刚刚生成文件的目录。
