@@ -32,9 +32,11 @@
 
 - Program.cs
 
-`
+```C#
+
     public class Program
     {
+
         public static void Main(string[] args)
         {
             BuildWebHost(args).Run();
@@ -46,6 +48,6 @@
                 .UseWebRoot("public")
                 .Build();
     }
-`
+```
 
 简单的代码，指定启动目录为public，就是我们刚刚生成文件的目录。
