@@ -344,6 +344,75 @@ public class StarWarsQuery : ObjectGraphType<object>
 
 ![5](005.png)
 
+* StarWarsCharacter.cs
+
+```C#
+    /// <summary>
+    /// 人物的查询声明
+    /// </summary>
+    public class CharacterInterface : InterfaceGraphType<StarWarsCharacter>
+    {
+        public CharacterInterface()
+        {
+            Name = "人物";
+
+            Field(d => d.Id).Description("人物编号");
+            Field(d => d.Name, nullable: true).Description("人物称呼");
+
+            Field<ListGraphType<CharacterInterface>>("friends");
+            Field<ListGraphType<EpisodeEnum>>("appearsIn", "登场的电影.");
+        }
+    }
+
+    /// <summary>
+    /// 星球大战人物
+    /// </summary>
+    public abstract class StarWarsCharacter
+    {
+        /// <summary>
+        /// 编号
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 称呼
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 朋友
+        /// </summary>
+        public string[] Friends { get; set; }
+
+        /// <summary>
+        /// 出现
+        /// </summary>
+        public Episodes[] AppearsIn { get; set; }
+    }
+```
+
+实体类对应查询声明
+
+```C#
+
+```
+
+```C#
+
+```
+
+```C#
+
+```
+
+```C#
+
+```
+
+```C#
+
+```
+
 ```C#
 
 ```
