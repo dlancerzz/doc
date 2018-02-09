@@ -269,8 +269,7 @@ query
 
 1. 我们看看数据定义 GraphQL.StarWars
 
-这是一个星战项目数据，星战迷请鼓掌
-我们从Schema开始
+这是一个星战项目数据，星战迷请鼓掌我们从 Schema 开始
 
 * StarWarsSchema.cs
 
@@ -286,7 +285,7 @@ public class StarWarsSchema : Schema
     }
 ```
 
-我们都知道GraphQL对应一个查询根节点，一个操作根节点，这里就分别对应这两个，下面我们先看看Query的根节点
+我们都知道 GraphQL 对应一个查询根节点，一个操作根节点，这里就分别对应这两个，下面我们先看看 Query 的根节点
 
 * StarWarsQuery.cs
 
@@ -340,7 +339,7 @@ public class StarWarsQuery : ObjectGraphType<object>
     }
 ```
 
-请注意由于bundle.js限制不能使用中文，我这里修改了一下。可以对应下图对比一下：
+请注意由于 bundle.js 限制不能使用中文，我这里修改了一下。可以对应下图对比一下：
 
 ![5](005.png)
 
@@ -391,28 +390,100 @@ public class StarWarsQuery : ObjectGraphType<object>
     }
 ```
 
-实体类对应查询声明
+实体类及对应的查询声明
+
+* EpisodeEnum.cs
 
 ```C#
+    public class EpisodeEnum : EnumerationGraphType
+    {
+        public EpisodeEnum()
+        {
+            Name = "Episode";
+            Description = "One of the films in the Star Wars Trilogy.";
+            AddValue("NEWHOPE", "Released in 1977.", 4);
+            AddValue("EMPIRE", "Released in 1980.", 5);
+            AddValue("JEDI", "Released in 1983.", 6);
+        }
+    }
 
+    public enum Episodes
+    {
+        NEWHOPE  = 4,
+        EMPIRE  = 5,
+        JEDI  = 6
+    }
 ```
+
+枚举及对应的查询声明，然后我们看看 Mutation(操作)功能。
+
+* StarWarsMutation.cs
 
 ```C#
+    public class StarWarsMutation : ObjectGraphType<object>
+    {
+        public StarWarsMutation(StarWarsData data)
+        {
+            Name = "操作";
 
+            //注册操作方法
+            Field<HumanType>(
+                "createHuman",
+                arguments: new QueryArguments(
+                    //注：这里是InputObjectGraphType类型
+                    new QueryArgument<NonNullGraphType<HumanInputType>> {Name = "human"}
+                ),
+                resolve: context =>
+                {
+                    //GraphQL是一门查询语言，即便是Mutation也会返回客户端一个结果
+                    var human = context.GetArgument<Human>("human");
+                    return data.AddHuman(human);
+                });
+        }
+    }
 ```
+
+这是一个操作的根节点，这里我们注册操作方法，操作方案对应的是 InputObjectGraphType 类型，它也会返回客户端一个结果。
+
+调用 Mutation 同样是 json，同时也要声明返回结果。调用
+
+```js
+mutation {
+  createHuman(human: {name: "12345", homePlanet: "os"}) {
+    id
+    name
+  }
+}
+```
+
+返回结果
+
+```json
+{
+  "data": {
+    "createHuman": {
+      "id": "32443a13-2864-4fd5-b395-52b8fa5486e7",
+      "name": "12345"
+    }
+  }
+}
+```
+
+* HumanInputType.cs
 
 ```C#
-
+    /// <summary>
+    /// 这个是一个输入类型和查询类型对应于Query一样，输入类型对应于Mutation
+    /// </summary>
+    public class HumanInputType : InputObjectGraphType
+    {
+        public HumanInputType()
+        {
+            Name = "HumanInput";
+            Field<NonNullGraphType<StringGraphType>>("name");
+            Field<StringGraphType>("homePlanet");
+        }
+    }
 ```
 
-```C#
-
-```
-
-```C#
-
-```
-
-```C#
-
-```
+输入类型和查询类型对应于Query一样，输入类型对应于Mutation
