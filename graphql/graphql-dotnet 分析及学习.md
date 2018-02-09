@@ -204,18 +204,18 @@ public class GraphQLMiddleware
 我们执行一个这样的查询，看看请求的数据分别是那些值
 
 ```js
-query
-{
-  heroes {
-    id
-    name
-    friends{
-      id
-      name
+    query
+    {
+    heroes {
+        id
+        name
+        friends{
+        id
+        name
+        }
+        appearsIn
     }
-    appearsIn
-  }
-}
+    }
 ```
 
 左侧请求数据作为 request.Query 数据传递到 IDocumentExecuter 进行分析
@@ -274,7 +274,7 @@ query
 * StarWarsSchema.cs
 
 ```C#
-public class StarWarsSchema : Schema
+    public class StarWarsSchema : Schema
     {
         public StarWarsSchema(IDependencyResolver resolver)
             : base(resolver)
@@ -290,7 +290,7 @@ public class StarWarsSchema : Schema
 * StarWarsQuery.cs
 
 ```C#
-public class StarWarsQuery : ObjectGraphType<object>
+    public class StarWarsQuery : ObjectGraphType<object>
     {
         public StarWarsQuery(StarWarsData data)
         {
@@ -448,12 +448,12 @@ public class StarWarsQuery : ObjectGraphType<object>
 调用 Mutation 同样是 json，同时也要声明返回结果。调用
 
 ```js
-mutation {
-  createHuman(human: {name: "12345", homePlanet: "os"}) {
-    id
-    name
-  }
-}
+    mutation {
+        createHuman(human: {name: "12345", homePlanet: "os"}) {
+            id
+            name
+        }
+    }
 ```
 
 返回结果
@@ -486,4 +486,4 @@ mutation {
     }
 ```
 
-输入类型和查询类型对应于Query一样，输入类型对应于Mutation
+输入类型和查询类型对应于 Query 一样，输入类型对应于 Mutation
